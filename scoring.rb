@@ -2,37 +2,34 @@
 
 require 'sqlite3'
 
-class Details
-
-	def initialize(name)
-		@final_score = 500
-		@dealer_count = 0
-		@player_count = 4
-		@drop = true
-		@gather = true
-		@name = name
-	end
-
-
-	def print(name)
-		puts @name
-		puts @final_score
-		puts @dealer_count
-		puts @player_count
-		puts @drop
-		puts @gather
-	end
-
+	attr_accessor = :name, :bid, :tricks, :team, :blind
+class Player
+ def initialize(name)
+  @name = name
+ end
+ def name
+  @name
+ end
 end
 
-#class Data
+class Gather
+	def player_list(number)
+		@player_list = []
+		number.times {
+		player  = gets.chomp
+		player = Player.new(player)
+		@player_list.push(player)
+		}
 
-#	def initialize()
-		#db = SQLite3::Database.open 'playerbase.db'
-		#db.results_as_hash = true
-#	end
-#end
+		@player_list.each do |name|
+			pp name
+		end
+	end
+end
 
+
+#db = SQLite3::Database.open 'playerbase.db'
+#db.results_as_hash = true
 #db.execute "DROP TABLE IF EXISTS players"
 #db.execute "DROP TABLE IF EXISTS teams"
 #db.close
@@ -41,4 +38,20 @@ end
 #db.execute "INSERT INTO players (name) VALUES(?)", 'isaac'
 #db.close
 
-Details.new.print(Isaac)
+Gather.new.player_list(4)
+
+#var  = gets.chomp
+#isaac = Player.new(var)
+#print isaac.name, +  " is cool\n"
+
+
+
+
+
+#class Data
+
+#	def initialize()
+		#db = SQLite3::Database.open 'playerbase.db'
+		#db.results_as_hash = true
+#	end
+#end
