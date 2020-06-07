@@ -1,48 +1,62 @@
 #!/bin/ruby
-
 require 'sqlite3'
 
 class Player
 	attr_accessor :name, :bid, :tricks, :team, :blind
+
 	def initialize(name)
 		@name = name
 	end
-end
+end #Player
+
+class Team
+	attr_accessor :players, :bid, :tricks, :bags, :score
+
+	def initialize(players)
+		@players[] = players
+	end
+end #Team
 
 class Gather
-	def player_list(number)
-		@player_list = []
+	def players(number)
+		@player_array = []
 		num = 1
 
 		number.times {
-		puts "Who is player " + num.to_s + "?"
+		print "Who is player " + num.to_s + "? "
 		player = gets.chomp
 		player = Player.new(player)
-		@player_list.push(player)
+		@player_array.push(player)
 		num += 1
 		}
+		puts #newline
 
-		return @player_list
+		return @player_array
 	end
+
 	def bids(player)
+		num = 1
+		print "What is " + player.name + "'s bid? "
 		input = gets.chomp
 		player.bid= input
 	end
-end
+end #Gather
 
 
-player_array = Gather.new.player_list(4)
+player_array = Gather.new.players(4)
 
+dealer_count = rand(1..4)
+player_array.rotate!(dealer_count)
 player_array.each do |title|
 	puts title.name
 end
 
-player_array.each do |player|
-	Gather.new.bids(player)
-end
-player_array.each do |title|
-	puts title.bid
-end
+#player_array.each do |player|
+	#Gather.new.bids(player)
+#end
+#player_array.each do |title|
+	#puts title.bid
+#end
 
 
 
@@ -52,16 +66,6 @@ end
 #	def initialize()
 		#db = SQLite3::Database.open 'playerbase.db'
 		#db.results_as_hash = true
+		#db.close
 #	end
 #end
-
-
-#db = SQLite3::Database.open 'playerbase.db'
-#db.results_as_hash = true
-#db.execute "DROP TABLE IF EXISTS players"
-#db.execute "DROP TABLE IF EXISTS teams"
-#db.close
-#db.execute "CREATE TABLE IF NOT EXISTS players (name TEXT, bid INT, blind INT, tricks_taken INT, team TEXT, dealer INT default 0)"
-#db.execute "CREATE TABLE IF NOT EXISTS teams (name TEXT, total_bid INT, tricks_taken INT, bags INT DEFAULT 0, score INT DEFAULT 0)"
-#db.execute "INSERT INTO players (name) VALUES(?)", 'isaac'
-#db.close
