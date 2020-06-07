@@ -2,30 +2,58 @@
 
 require 'sqlite3'
 
-	attr_accessor = :name, :bid, :tricks, :team, :blind
 class Player
- def initialize(name)
-  @name = name
- end
- def name
-  @name
- end
+	attr_accessor :name, :bid, :tricks, :team, :blind
+	def initialize(name)
+		@name = name
+	end
 end
 
 class Gather
 	def player_list(number)
 		@player_list = []
+		num = 1
+
 		number.times {
-		player  = gets.chomp
+		puts "Who is player " + num.to_s + "?"
+		player = gets.chomp
 		player = Player.new(player)
 		@player_list.push(player)
+		num += 1
 		}
 
-		@player_list.each do |name|
-			pp name
-		end
+		return @player_list
+	end
+	def bids(player)
+		input = gets.chomp
+		player.bid= input
 	end
 end
+
+
+player_array = Gather.new.player_list(4)
+
+player_array.each do |title|
+	puts title.name
+end
+
+player_array.each do |player|
+	Gather.new.bids(player)
+end
+player_array.each do |title|
+	puts title.bid
+end
+
+
+
+########################################
+#class Data
+
+#	def initialize()
+		#db = SQLite3::Database.open 'playerbase.db'
+		#db.results_as_hash = true
+#	end
+#end
 
 
 #db = SQLite3::Database.open 'playerbase.db'
@@ -37,21 +65,3 @@ end
 #db.execute "CREATE TABLE IF NOT EXISTS teams (name TEXT, total_bid INT, tricks_taken INT, bags INT DEFAULT 0, score INT DEFAULT 0)"
 #db.execute "INSERT INTO players (name) VALUES(?)", 'isaac'
 #db.close
-
-Gather.new.player_list(4)
-
-#var  = gets.chomp
-#isaac = Player.new(var)
-#print isaac.name, +  " is cool\n"
-
-
-
-
-
-#class Data
-
-#	def initialize()
-		#db = SQLite3::Database.open 'playerbase.db'
-		#db.results_as_hash = true
-#	end
-#end
