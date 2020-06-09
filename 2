@@ -40,7 +40,7 @@ class Player
 end
 
 class Team
-	attr_accessor :players, :bid, :tricks, :bags, :score, :name
+	attr_accessor :players, :bid, :tricks, :bags, :score
 
 	def initialize(array_of_players, team_name)
 		@name = team_name
@@ -48,7 +48,7 @@ class Team
 	end
 
 	def list_players()
-		return @players.first.name + " and " + @players.last.name
+		puts @players.first.name, + " and ", + @players.last.name
 
 		#@players.each do |player|
 			#puts player.name
@@ -143,7 +143,6 @@ class Dealing
 			print player_array.last.name, + " is dealing first."
 		end
 		puts #newline
-		puts #newline
 
 		return player_array
 	end
@@ -158,12 +157,6 @@ player_array = gatherer.players(4)
 team_array = gatherer.teams(player_array)
 order = Dealing.new()
 
-team_array.each do |team|
-	print team.list_players, + " are on team ", + team.name
-	puts #newline
-end
-puts #newline
-
 #while score -lt 500; do
 player_array = order.rotate(player_array)
 gatherer.bids(player_array)
@@ -171,4 +164,10 @@ player_array = order.rotate(player_array)
 player_array.each do |player|
 	player.persist
 end
+team_array.each do |team|
+	puts team.list_players, + " are on a team"
+end
+#end
+#end
+
 
