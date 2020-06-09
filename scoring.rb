@@ -1,43 +1,7 @@
 #!/bin/ruby
 require 'sqlite3'
-
-class Player
-	attr_accessor :name, :bid, :blind, :tricks
-
-	def initialize(name)
-		@name = name
-		@bid = 0
-		@tricks = 0
-
-		db = SQLite3::Database.open 'playerbase.db'
-		db.results_as_hash = true
-		db.execute('INSERT INTO players(name) VALUES(?)', @name)
-		db.close
-	end
-
-	def persist()
-		db = SQLite3::Database.open 'playerbase.db'
-		db.results_as_hash = true
-		db.execute('UPDATE players SET bid = ?, blind = ?, tricks = ? WHERE name IS ?', @bid, @blind, @tricks, @name)
-		db.close
-	end
-
-	def set_team=(team)
-		@team = team
-		db = SQLite3::Database.open 'playerbase.db'
-		db.results_as_hash = true
-		db.execute('UPDATE players set team = ? WHERE name IS ?', @team, @name)
-		db.close
-	end
-
-	def set_bid=(bid)
-		@bid = bid
-		db = SQLite3::Database.open 'playerbase.db'
-		db.results_as_hash = true
-		db.execute('UPDATE players SET bid = ? WHERE name IS ?', @bid)
-		db.close
-	end
-end
+require 'Player-class'
+require 'Dealing-class'
 
 class Team
 	attr_accessor :players, :bid, :tricks, :bags, :score, :name
@@ -47,13 +11,8 @@ class Team
 		@players = array_of_players
 	end
 
-	def list_players()
+	def list_players() #only used for sending input to the screen. does not return the actual player objects
 		return @players.first.name + " and " + @players.last.name
-
-		#@players.each do |player|
-			#puts player.name
-		#end
-		#return nil
 	end
 end
 
@@ -124,32 +83,6 @@ class Gather
 	end
 end #Gather
 
-class Dealing
-	attr_accessor :start
-	def initialize
-		@start = true
-	end
-
-	def rotate(players)
-		player_array = players
-
-		if @start == false then
-			player_array.rotate!(1)
-			print player_array.last.name, + " is dealing next."
-		else
-			@start = false
-			dealer_count = rand(1..4)
-			player_array.rotate!(dealer_count)
-			print player_array.last.name, + " is dealing first."
-		end
-		puts #newline
-		puts #newline
-
-		return player_array
-	end
-end #Dealing
-
-
 arbiter = Game.new
 arbiter.set_tables
 
@@ -171,4 +104,4 @@ player_array = order.rotate(player_array)
 player_array.each do |player|
 	player.persist
 end
-
+#end
