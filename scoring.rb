@@ -1,7 +1,7 @@
 #!/bin/ruby
 require 'sqlite3'
-require 'Player-class'
-require 'Dealing-class'
+require_relative 'player'
+require_relative 'dealing'
 
 class Team
 	attr_accessor :players, :bid, :tricks, :bags, :score, :name
