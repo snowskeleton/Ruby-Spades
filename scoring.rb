@@ -2,16 +2,32 @@
 require 'sqlite3'
 
 class Player
-	attr_accessor :name, :bid, :tricks, :team, :blind
+	attr_accessor :name, :bid, :blind, :tricks
 
 	def initialize(name)
 		@name = name
-	end
-	def persist()
+		@bid = 0
+		@tricks = 0
+
 		db = SQLite3::Database.open 'playerbase.db'
 		db.results_as_hash = true
-		db.execute('INSERT INTO players(name) VALUES(?)', title.name)
-	#	here there be SQL
+		db.execute('INSERT INTO players(name) VALUES(?)', @name)
+		db.close
+	end
+
+	def persist(player)
+		db = SQLite3::Database.open 'playerbase.db'
+		db.results_as_hash = true
+		db.execute('UPDATE INTO players (total_bid, blind, tricks) VALUES(?, ?)', @bid, @blind, @tricks)
+		db.close
+	end
+
+	def set_team=(team)
+		@team = team
+		db = SQLite3::Database.open 'playerbase.db'
+		db.results_as_hash = true
+		db.execute('UPDATE players set team = ? WHERE name IS ?', @team, @name)
+		db.close
 	end
 end
 
@@ -23,6 +39,19 @@ class Team
 	end
 end
 
+class Game
+	def set_tables 
+		db = SQLite3::Database.open 'playerbase.db'
+		db.results_as_hash = true
+		db.execute "DROP TABLE IF EXISTS players"
+		db.execute "DROP TABLE IF EXISTS teams"
+
+		db.execute "CREATE TABLE IF NOT EXISTS players (name TEXT, bid INT DEFAULT 0, blind INT DEFAULT 0, tricks INT DEFAULT 0, team TEXT, dealer INT DEFAULT 0)"
+		db.execute "CREATE TABLE IF NOT EXISTS teams (name TEXT, bid INT DEFAULT 0, tricks INT DEFAULT 0, bags INT DEFAULT 0, score INT DEFAULT 0)"
+		db.close
+	end
+end
+
 class Gather
 	def players(number)
 		@player_array = []
@@ -30,40 +59,33 @@ class Gather
 
 		number.times {
 			print "Who is player " + num.to_s + "? "
-			player = gets.chomp
+			player = gets.chomp.to_s
 			player = Player.new(player)
-			player.persist
 			@player_array.push(player)
 			num += 1
 		}
 		puts #newline
-
-		db = SQLite3::Database.open 'playerbase.db'
-		db.results_as_hash = true
-		@player_array.each do |title|
-			title.
-			db.execute('INSERT INTO players(name) VALUES(?)', title.name)
-		end
-		db.close
 		return @player_array
 	end
 
-	def teams
-		db = SQLite3::Database.open 'playerbase.db'
-		db.results_as_hash = true
-
+	def teams(player_array) # I don't like this. Feels sloppy.
 		print "Please name team 1: "
 		team_name = gets.chomp
-		db.execute('INSERT INTO teams(name) VALUES(?)', team_name)
-		db.execute('UPDATE players SET team = ? WHERE rowID IS 1', team_name)
-		db.execute('UPDATE players SET team = ? WHERE rowID IS 3', team_name)
+		team = []
+		team.push(player_array[0])
+		team.push(player_array[2])
+		team.each do |player|
+			player.set_team = (team_name)
+		end
 
 		print "Please name team 2: "
 		team_name = gets.chomp
-		db.execute('INSERT INTO teams(name) VALUES(?)', team_name)
-		db.execute('UPDATE players SET team = ? WHERE rowID IS 2', team_name)
-		db.execute('UPDATE players SET team = ? WHERE rowID IS 4', team_name)
-		db.close
+		team = []
+		team.push(player_array[1])
+		team.push(player_array[3])
+		team.each do |player|
+			player.set_team = (team_name)
+		end
 		puts #newline
 	end
 
@@ -108,21 +130,13 @@ class Dealing
 	end
 end #Dealing
 
-def set_tables 
-	db = SQLite3::Database.open 'playerbase.db'
-	db.results_as_hash = true
-	db.execute "DROP TABLE IF EXISTS players"
-	db.execute "DROP TABLE IF EXISTS teams"
 
-	db.execute "CREATE TABLE IF NOT EXISTS players (name TEXT, bid INT, blind INT, tricks_taken INT, team TEXT, dealer INT default 0)"
-	db.execute "CREATE TABLE IF NOT EXISTS teams (name TEXT, total_bid INT, tricks_taken INT, bags INT DEFAULT 0, score INT DEFAULT 0)"
-	db.close
-end
+holy = Game.new
+holy.set_tables
 
-set_tables
-
-player_array = Gather.new.players(4)
-team_array = Gather.new.teams
+gatherer = Gather.new
+player_array = gatherer.players(4)
+team_array = gatherer.teams(player_array)
 order = Dealing.new()
 
 #while score -lt 500; do
