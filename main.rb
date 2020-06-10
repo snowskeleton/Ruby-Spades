@@ -31,6 +31,29 @@ class Game
 		db.close
 	end
 
+	def persist(player_array)
+		player_array.each do |player|
+			player.persist
+		end
+	end
+	
+	def declare_bid(player_array)
+		player_array.each do |player|
+			print player.name, + " bid ", + player.bid, + "."
+		puts #newline
+		end
+		puts #newline
+		print "Is this correct? "
+	end
+
+	def declare_tricks(player_array)
+		player_array.each do |player|
+			print player.name, + " won ", + player.tricks, + " tricks."
+		puts #newline
+		end
+		puts #newline
+		print "Is this correct? "
+	end
 end
 
 class Gather
@@ -114,13 +137,16 @@ puts #newline
 
 #while score -lt 500; do
 player_array = order.rotate(player_array)
-gatherer.bids(player_array)
-player_array = order.rotate(player_array)
-player_array.each do |player|
-	player.persist
-end
-gatherer.tricks(team_array)
 
-player_array.each do |player|
-	puts player.bid
-end
+gatherer.bids(player_array)
+arbiter.declare_bid(player_array)
+
+arbiter.persist(player_array)
+
+gatherer.tricks(team_array)
+arbiter.declare_tricks(player_array)
+
+#player_array.each do |player|
+	#print player.name, + " bid ", + player.bid, + "."
+#end
+	#puts #newline
