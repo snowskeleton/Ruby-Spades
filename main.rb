@@ -5,22 +5,30 @@ require_relative 'dealing'
 
 class Team
 	attr_accessor :players, :bid, :tricks, :bags, :score, :name
+	@@list = []
 
 	def initialize(array_of_players, team_name)
 		@name = team_name
 		@players = array_of_players
+		@@list.push(self)
+	end
+
+	def self.list
+		@@list
 	end
 
 	def list_players() #only used for sending input to the screen. does not return the actual player objects
 		return @players.first.name + " and " + @players.last.name
 	end
+
+
 	def players()
 		@players
 	end
 end
 
 class Game
-	def set_tables 
+	def self.set_tables 
 		db = SQLite3::Database.open 'playerbase.db'
 		db.results_as_hash = true
 		db.execute "DROP TABLE IF EXISTS players"
@@ -31,33 +39,35 @@ class Game
 		db.close
 	end
 
-	def persist(player_array)
+	def self.persist(player_array)
 		player_array.each do |player|
 			player.persist
 		end
 	end
 	
-	def declare_bid(player_array)
+	def self.declare_bid(player_array)
 		player_array.each do |player|
 			print player.name, + " bid ", + player.bid, + "."
 		puts #newline
 		end
 		puts #newline
 		print "Is this correct? "
+		#if not, then retry. somehow.
 	end
 
-	def declare_tricks(player_array)
-		player_array.each do |player|
+	def self.declare_tricks()
+		Player.list.each do |player|
 			print player.name, + " won ", + player.tricks, + " tricks."
-		puts #newline
+			puts #newline
 		end
 		puts #newline
 		print "Is this correct? "
+		#if not, then retry. somehow.
 	end
 end
 
 class Gather
-	def players(number)
+	def self.players(number)
 		@player_array = []
 		num = 1
 
@@ -72,7 +82,7 @@ class Gather
 		return @player_array
 	end
 
-	def teams(player_array) # I don't like this. Feels sloppy.
+	def self.teams(player_array) # I don't like this. Feels sloppy.
 		team_array = []
 		print "Please name team 1: "
 		team_name = gets.chomp
@@ -100,7 +110,7 @@ class Gather
 		return team_array
 	end
 
-	def bids(player_array)
+	def self.bids(player_array)
 		player_array.each do |player|
 			print "What does " + player.name + " bid? "
 			bid = gets.chomp
@@ -109,8 +119,8 @@ class Gather
 		puts #newline
 	end
 
-	def tricks(team_array)
-		team_array.each do |team|
+	def self.tricks()
+		Team.list.each do |team|
 			team.players.each do |player|
 				print "How many tricks did " + player.name + " take? "
 				tricks = gets.chomp
@@ -121,15 +131,13 @@ class Gather
 	end
 end #Gather
 
-arbiter = Game.new
-arbiter.set_tables
+Game.set_tables
 
-gatherer = Gather.new
-player_array = gatherer.players(4)
-team_array = gatherer.teams(player_array)
+player_array = Gather.players(4)
+team_array = Gather.teams(player_array)
 order = Dealing.new()
 
-team_array.each do |team|
+Team.list.each do |team|
 	print team.list_players, + " are on team ", + team.name
 	puts #newline
 end
@@ -138,13 +146,13 @@ puts #newline
 #while score -lt 500; do
 player_array = order.rotate(player_array)
 
-gatherer.bids(player_array)
-arbiter.declare_bid(player_array)
+Gather.bids(player_array)
+Game.declare_bid(player_array)
 
-arbiter.persist(player_array)
+Game.persist(player_array)
 
-gatherer.tricks(team_array)
-arbiter.declare_tricks(player_array)
+Gather.tricks
+Game.declare_tricks()
 
 #player_array.each do |player|
 	#print player.name, + " bid ", + player.bid, + "."

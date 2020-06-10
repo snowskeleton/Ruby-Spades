@@ -1,16 +1,22 @@
 #!/bin/ruby
 class Player
 	attr_accessor :name, :bid, :blind, :tricks
+	@@list = []
 
 	def initialize(name)
 		@name = name
 		@bid = 0
 		@tricks = 0
+		@@list.push(self)
 
 		db = SQLite3::Database.open 'playerbase.db'
 		db.results_as_hash = true
 		db.execute('INSERT INTO players(name) VALUES(?)', @name)
 		db.close
+	end
+
+	def self.list
+		@@list
 	end
 
 	def persist()
