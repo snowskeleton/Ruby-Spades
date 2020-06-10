@@ -17,6 +17,15 @@ class Team
 		@@list
 	end
 
+	def self.declare()
+		self.list.each do |team|
+			print team.list_players, + " are on team ", + team.name
+			puts #newline
+		end
+		sleep(1)
+		puts #newline
+	end
+
 	def list_players() #only used for sending input to the screen. does not return the actual player objects
 		return @players.first.name + " and " + @players.last.name
 	end
@@ -129,22 +138,17 @@ class Gather
 		end
 		puts #newline
 	end
-end #Gather
+end
+
 
 Game.set_tables
 
 player_array = Gather.players(4)
 team_array = Gather.teams(player_array)
-order = Dealing.new()
-
-Team.list.each do |team|
-	print team.list_players, + " are on team ", + team.name
-	puts #newline
-end
-puts #newline
+Team.declare
 
 #while score -lt 500; do
-player_array = order.rotate(player_array)
+player_array = Dealing.rotate(player_array)
 
 Gather.bids(player_array)
 Game.declare_bid(player_array)
