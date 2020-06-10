@@ -73,6 +73,7 @@ class Gather
 		team_two = Team.new(team, team_name)
 		team_array.push(team_two)
 		puts #newline
+
 		return team_array
 	end
 
