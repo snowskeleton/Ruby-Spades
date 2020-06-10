@@ -14,6 +14,9 @@ class Team
 	def list_players() #only used for sending input to the screen. does not return the actual player objects
 		return @players.first.name + " and " + @players.last.name
 	end
+	def players()
+		@players
+	end
 end
 
 class Game
@@ -76,8 +79,19 @@ class Gather
 	def bids(player_array)
 		player_array.each do |player|
 			print "What does " + player.name + " bid? "
-			input = gets.chomp
-			player.bid = (input)
+			bid = gets.chomp
+			player.set_bid = (bid)
+		end
+		puts #newline
+	end
+
+	def tricks(team_array)
+		team_array.each do |team|
+			team.players.each do |player|
+				print "How many tricks did " + player.name + " take? "
+				tricks = gets.chomp
+				player.set_tricks = (tricks)
+			end
 		end
 		puts #newline
 	end
@@ -104,4 +118,8 @@ player_array = order.rotate(player_array)
 player_array.each do |player|
 	player.persist
 end
-#end
+gatherer.tricks(team_array)
+
+player_array.each do |player|
+	puts player.bid
+end
