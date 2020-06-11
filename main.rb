@@ -13,6 +13,7 @@ class Team
 		@@list.push(self)
 		@tricks = 0
 		@bid = 0
+		@score = 0
 	end
 
 	def self.list
@@ -31,6 +32,18 @@ class Team
 	def self.set_tricks
 		@@list.each do |team|
 			team.set_tricks
+		end
+	end
+
+	def self.set_bid
+		@@list.each do |team|
+			team.set_bid
+		end
+	end
+
+	def self.update_score
+		@@list.each do |team|
+			team.update_score
 		end
 	end
 
@@ -57,28 +70,32 @@ class Team
 		return @players.first.name + " and " + @players.last.name
 	end
 
-	def update_score
+	def update_score()
 		if @tricks >= bid
-			@score = @score + ((@bid * 10) + (@tricks - @bid))
-			@bags = @bags + (@tricks - @bid)
-			if @bags >= 10
-				@score = @score - 100
+			@score = @score.to_i + ((@bid.to_i * 10) + (@tricks.to_i - @bid.to_i))
+			@bags = @bags.to_i + (@tricks.to_i - @bid.to_i)
+			if @bags.to_i >= 10
+				@score = @score.to_i - 100
 				@bags = 0
 			end
 		else
-			@score = @score - (@bid * 10)
+			@score = @score.to_i - (@bid.to_i * 10)
 		end
 
 		@players.each do |player|
 			if player.bid = 0 && player.tricks = 0
-				player.blind = 1 ? @score = @score + 100 : @score = @score + 50
+				player.blind = 1 ? @score = @score.to_i + 100 : @score = @score.to_i + 50
 			end
 			if player.bid = 0 && player.tricks >= 0
-				player.blind = 1 ? @score = @score - 100 : @score = @score - 50
+				player.blind = 1 ? @score = @score.to_i - 100 : @score = @score.to_i - 50
+			end
+		end
 	end
 end
 
 class Game
+	@@continue = true
+
 	def self.set_tables 
 		db = SQLite3::Database.open 'playerbase.db'
 		db.results_as_hash = true
@@ -106,12 +123,13 @@ class Game
 		#if not, then retry. somehow.
 	end
 
-	def score_too_high?()
-	end
-
-	def update_score 
-		#Team.list.each do |
-		#end
+	def self.keep_going()
+		if Team.list.first <= 500 && Team.list.last <= 500 && Team.list.first != Team.list.last
+			@@continue = true
+		else
+			@@continue = false
+		end
+		return @@continue
 	end
 end
 
@@ -196,7 +214,7 @@ player_array = Gather.players(4)
 team_array = Gather.teams(player_array)
 Team.declare
 
-#while score -lt 500; do
+while Game.keep_going
 player_array = Dealing.rotate(player_array)
 
 Gather.bids(player_array)
@@ -208,3 +226,9 @@ Gather.tricks
 Player.declare_tricks()
 
 Team.set_tricks
+Team.set_bid
+Team.update_score
+team_array.each do |team|
+	puts team.score
+end
+end
