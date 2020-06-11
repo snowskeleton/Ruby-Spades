@@ -11,6 +11,8 @@ class Team
 		@name = team_name
 		@players = array_of_players
 		@@list.push(self)
+		@tricks = 0
+		@bid = 0
 	end
 
 	def self.list
@@ -26,13 +28,24 @@ class Team
 		puts #newline
 	end
 
+	def players()
+		@players
+	end
+
+	def set_tricks()
+		@tricks = 0
+		@players.each do |player|
+			@tricks = @tricks + player.tricks.to_i
+		end
+		puts @tricks
+	end
+
 	def list_players() #only used for sending input to the screen. does not return the actual player objects
 		return @players.first.name + " and " + @players.last.name
 	end
 
-
-	def players()
-		@players
+	def update_score
+		#total_bid = Team.list.players.each do |
 	end
 end
 
@@ -64,14 +77,12 @@ class Game
 		#if not, then retry. somehow.
 	end
 
-	def self.declare_tricks()
-		Player.list.each do |player|
-			print player.name, + " won ", + player.tricks, + " tricks."
-			puts #newline
-		end
-		puts #newline
-		print "Is this correct? "
-		#if not, then retry. somehow.
+	def score_too_high?()
+	end
+
+	def update_score 
+		#Team.list.each do |
+		#end
 	end
 end
 
@@ -156,9 +167,7 @@ Game.declare_bid(player_array)
 Game.persist(player_array)
 
 Gather.tricks
-Game.declare_tricks()
-
-#player_array.each do |player|
-	#print player.name, + " bid ", + player.bid, + "."
-#end
-	#puts #newline
+Player.declare_tricks()
+team_array.each do |team|
+	team.set_tricks
+end

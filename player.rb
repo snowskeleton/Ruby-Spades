@@ -49,4 +49,15 @@ class Player
 		db.execute('UPDATE players SET tricks = ? WHERE name IS ?', @tricks, @name)
 		db.close
 	end
+
+	def self.declare_tricks()
+		Player.list.each do |player|
+			print player.name, + " won ", + player.tricks, + " tricks."
+			puts #newline
+		end
+		puts #newline
+		print "Is this correct? "
+		#if not, then retry. somehow.
+	end
+
 end
