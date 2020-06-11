@@ -7,6 +7,7 @@ class Player
 		@name = name
 		@bid = 0
 		@tricks = 0
+		@blind = 0
 		@@list.push(self)
 
 		db = SQLite3::Database.open 'playerbase.db'

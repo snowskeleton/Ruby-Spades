@@ -28,8 +28,22 @@ class Team
 		puts #newline
 	end
 
+	def self.set_tricks
+		@@list.each do |team|
+			team.set_tricks
+		end
+	end
+
 	def players()
 		@players
+	end
+
+
+	def set_bid()
+		@bid = 0
+		@players.each do |player|
+			@bid = @bid + player.bid.to_i
+		end
 	end
 
 	def set_tricks()
@@ -37,7 +51,6 @@ class Team
 		@players.each do |player|
 			@tricks = @tricks + player.tricks.to_i
 		end
-		puts @tricks
 	end
 
 	def list_players() #only used for sending input to the screen. does not return the actual player objects
@@ -45,7 +58,23 @@ class Team
 	end
 
 	def update_score
-		#total_bid = Team.list.players.each do |
+		if @tricks >= bid
+			@score = @score + ((@bid * 10) + (@tricks - @bid))
+			@bags = @bags + (@tricks - @bid)
+			if @bags >= 10
+				@score = @score - 100
+				@bags = 0
+			end
+		else
+			@score = @score - (@bid * 10)
+		end
+
+		@players.each do |player|
+			if player.bid = 0 && player.tricks = 0
+				player.blind = 1 ? @score = @score + 100 : @score = @score + 50
+			end
+			if player.bid = 0 && player.tricks >= 0
+				player.blind = 1 ? @score = @score - 100 : @score = @score - 50
 	end
 end
 
@@ -151,6 +180,15 @@ class Gather
 	end
 end
 
+def calculate_score
+team_array.each do |team|
+	team.set_tricks
+end
+
+team_array.each do |team|
+	team.set_bid
+end
+end
 
 Game.set_tables
 
@@ -168,6 +206,5 @@ Game.persist(player_array)
 
 Gather.tricks
 Player.declare_tricks()
-team_array.each do |team|
-	team.set_tricks
-end
+
+Team.set_tricks
