@@ -57,8 +57,20 @@ class Player
 			puts #newline
 		end
 		puts #newline
-		print "Is this correct? "
+		#print "Is this correct? "
 		#if not, then retry. somehow.
+	end
+
+	def nil?()
+		@bid == 0 ? true : false
+	end
+
+	def blind?()
+		@blind == 1 ? true : false
+	end
+
+	def succeed?()
+		@tricks.to_i > @bid.to_i ? false : true
 	end
 
 end

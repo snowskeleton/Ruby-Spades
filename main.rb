@@ -36,8 +36,6 @@ class Game
 	end
 
 	def self.keep_going?()
-		puts Team.list.first.score
-		puts Team.list.last.score
 		if (Team.list.first.score >= 500 || Team.list.last.score >= 500) && (Team.list.first.score != Team.list.last.score)
 			return false
 		else
@@ -62,10 +60,6 @@ player_array = Gather.players(4)
 team_array = Gather.teams(player_array)
 Team.declare
 
-#if Game.keep_going
-#puts "scores are", + (Team.list.first.score <= 500) && (Team.list.last.score <= 500)
-#end
-
 while Game.keep_going?
 player_array = Dealing.rotate(player_array)
 
@@ -75,12 +69,14 @@ Game.declare_bid(player_array)
 Game.persist(player_array)
 
 Gather.tricks
-Player.declare_tricks()
+Player.declare_tricks() #this should probably be from Team, not Player
 
 Team.set_tricks
 Team.set_bid
-Team.update_score
+
+#Team.update_score
 team_array.each do |team|
-	puts team.score
+	team.update_score
 end
+Team.list_score
 end

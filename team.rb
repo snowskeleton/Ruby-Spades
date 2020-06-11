@@ -44,6 +44,12 @@ class Team
 		end
 	end
 
+	def self.list_score
+		@@list.each do |team|
+			puts team.score
+		end
+	end
+
 	def players()
 		@players
 	end
@@ -67,6 +73,14 @@ class Team
 		return @players.first.name + " and " + @players.last.name
 	end
 
+	def up_score(num)
+		@score = @score + num.to_i
+	end
+
+	def down_score(num)
+		@score = @score - num.to_i
+	end
+
 	def update_score()
 		if @tricks >= bid
 			@score = @score.to_i + ((@bid.to_i * 10) + (@tricks.to_i - @bid.to_i))
@@ -80,11 +94,12 @@ class Team
 		end
 
 		@players.each do |player|
-			if player.bid = 0 && player.tricks = 0
-				player.blind == 1 ? @score = @score.to_i + 100 : @score = @score.to_i + 50
-			end
-			if player.bid = 0 && player.tricks >= 0
-				player.blind == 1 ? @score = @score.to_i - 100 : @score = @score.to_i - 50
+			if player.nil?
+				if player.blind?
+					player.succeed? ? self.up_score(100) : self.down_score(100)
+				else
+					player.succeed? ? self.up_score(50) : self.down_score(50)
+				end
 			end
 		end
 	end
