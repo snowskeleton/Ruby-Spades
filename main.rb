@@ -2,96 +2,8 @@
 require 'sqlite3'
 require_relative 'player'
 require_relative 'dealing'
-
-class Team
-	attr_accessor :players, :bid, :tricks, :bags, :score, :name
-	@@list = []
-
-	def initialize(array_of_players, team_name)
-		@name = team_name
-		@players = array_of_players
-		@@list.push(self)
-		@tricks = 0
-		@bid = 0
-		@score = 0
-	end
-
-	def self.list
-		@@list
-	end
-
-	def self.declare()
-		self.list.each do |team|
-			print team.list_players, + " are on team ", + team.name
-			puts #newline
-		end
-		sleep(1)
-		puts #newline
-	end
-
-	def self.set_tricks
-		@@list.each do |team|
-			team.set_tricks
-		end
-	end
-
-	def self.set_bid
-		@@list.each do |team|
-			team.set_bid
-		end
-	end
-
-	def self.update_score
-		@@list.each do |team|
-			team.update_score
-		end
-	end
-
-	def players()
-		@players
-	end
-
-
-	def set_bid()
-		@bid = 0
-		@players.each do |player|
-			@bid = @bid + player.bid.to_i
-		end
-	end
-
-	def set_tricks()
-		@tricks = 0
-		@players.each do |player|
-			@tricks = @tricks + player.tricks.to_i
-		end
-	end
-
-	def list_players() #only used for sending input to the screen. does not return the actual player objects
-		return @players.first.name + " and " + @players.last.name
-	end
-
-	def update_score()
-		if @tricks >= bid
-			@score = @score.to_i + ((@bid.to_i * 10) + (@tricks.to_i - @bid.to_i))
-			@bags = @bags.to_i + (@tricks.to_i - @bid.to_i)
-			if @bags.to_i >= 10
-				@score = @score.to_i - 100
-				@bags = 0
-			end
-		else
-			@score = @score.to_i - (@bid.to_i * 10)
-		end
-
-		@players.each do |player|
-			if player.bid = 0 && player.tricks = 0
-				player.blind = 1 ? @score = @score.to_i + 100 : @score = @score.to_i + 50
-			end
-			if player.bid = 0 && player.tricks >= 0
-				player.blind = 1 ? @score = @score.to_i - 100 : @score = @score.to_i - 50
-			end
-		end
-	end
-end
+require_relative 'team'
+require_relative 'gather'
 
 class Game
 	@@continue = true
@@ -119,82 +31,18 @@ class Game
 		puts #newline
 		end
 		puts #newline
-		print "Is this correct? "
+		#print "Is this correct? "
 		#if not, then retry. somehow.
 	end
 
-	def self.keep_going()
-		if Team.list.first <= 500 && Team.list.last <= 500 && Team.list.first != Team.list.last
-			@@continue = true
+	def self.keep_going?()
+		puts Team.list.first.score
+		puts Team.list.last.score
+		if (Team.list.first.score >= 500 || Team.list.last.score >= 500) && (Team.list.first.score != Team.list.last.score)
+			return false
 		else
-			@@continue = false
+			return true
 		end
-		return @@continue
-	end
-end
-
-class Gather
-	def self.players(number)
-		@player_array = []
-		num = 1
-
-		number.times {
-			print "Who is player " + num.to_s + "? "
-			player = gets.chomp.to_s
-			player = Player.new(player)
-			@player_array.push(player)
-			num += 1
-		}
-		puts #newline
-		return @player_array
-	end
-
-	def self.teams(player_array) # I don't like this. Feels sloppy.
-		team_array = []
-		print "Please name team 1: "
-		team_name = gets.chomp
-		team = []
-		team.push(player_array[0])
-		team.push(player_array[2])
-		team.each do |player|
-			player.set_team = (team_name)
-		end
-		team_one = Team.new(team, team_name)
-		team_array.push(team_one)
-
-		print "Please name team 2: "
-		team_name = gets.chomp
-		team = []
-		team.push(player_array[1])
-		team.push(player_array[3])
-		team.each do |player|
-			player.set_team = (team_name)
-		end
-		team_two = Team.new(team, team_name)
-		team_array.push(team_two)
-		puts #newline
-
-		return team_array
-	end
-
-	def self.bids(player_array)
-		player_array.each do |player|
-			print "What does " + player.name + " bid? "
-			bid = gets.chomp
-			player.set_bid = (bid)
-		end
-		puts #newline
-	end
-
-	def self.tricks()
-		Team.list.each do |team|
-			team.players.each do |player|
-				print "How many tricks did " + player.name + " take? "
-				tricks = gets.chomp
-				player.set_tricks = (tricks)
-			end
-		end
-		puts #newline
 	end
 end
 
@@ -214,7 +62,11 @@ player_array = Gather.players(4)
 team_array = Gather.teams(player_array)
 Team.declare
 
-while Game.keep_going
+#if Game.keep_going
+#puts "scores are", + (Team.list.first.score <= 500) && (Team.list.last.score <= 500)
+#end
+
+while Game.keep_going?
 player_array = Dealing.rotate(player_array)
 
 Gather.bids(player_array)
