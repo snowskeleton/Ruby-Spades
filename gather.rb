@@ -54,12 +54,21 @@ class Gather
 	end
 
 	def self.tricks()
+		total_tricks = 0
 		Team.list.each do |team|
 			team.players.each do |player|
 				print "How many tricks did " + player.name + " take? "
 				tricks = gets.chomp.to_i
 				player.set_tricks = (tricks)
+				total_tricks += tricks
 			end
+		end
+		if total_tricks > 13
+			puts
+			puts "Someone messed up here. Please try again."
+			sleep(1)
+			puts
+			self.tricks
 		end
 		puts #newline
 	end
