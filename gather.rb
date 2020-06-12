@@ -47,10 +47,24 @@ class Gather
 	def self.bids(player_array)
 		player_array.each do |player|
 			print "What does " + player.name + " bid? "
-			bid = gets.chomp.to_i
+			bid = gets.chomp
 			player.set_bid = (bid)
+
+			if bid = 0 && Game.allow_blind?(player.team)
+				print "Is ", + player.name, + " blind?"
+				answer = gets.chomp.to_s
+				case answer
+				when  'yes', 'y', 'ye', 'yse', 'esy', 'eys'
+					player.set_blind=(1)
+					puts "You're dark company."
+				else
+					puts "May the light of your soul guide you."
+					player.set_blind=(0)
+				end
+			end
 		end
 		puts #newline
+		
 	end
 
 	def self.tricks()

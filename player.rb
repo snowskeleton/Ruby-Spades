@@ -35,6 +35,10 @@ class Player
 		db.close
 	end
 
+	def team()
+		@team
+	end
+
 	def set_bid=(bid)
 		@bid = bid
 		db = SQLite3::Database.open 'playerbase.db'
@@ -49,6 +53,10 @@ class Player
 		db.results_as_hash = true
 		db.execute('UPDATE players SET tricks = ? WHERE name IS ?', @tricks, @name)
 		db.close
+	end
+
+	def set_blind=(blind)
+		@blind = blind
 	end
 
 	def self.declare_tricks()

@@ -50,6 +50,16 @@ class Team
 		end
 	end
 
+	def self.allow_blind?()
+		if self.list.first.score >= 100 + self.list.last.score
+			return self.list.first.name
+		elsif self.list.last.score >= 100 + self.list.first.score
+			return self.list.last.name
+		else
+			return nil
+		end
+	end
+
 	def players()
 		@players
 	end
