@@ -6,7 +6,6 @@ require_relative 'team'
 require_relative 'gather'
 require_relative 'game'
 
-
 def calculate_score
 team_array.each do |team|
 	team.set_tricks
@@ -17,11 +16,13 @@ team_array.each do |team|
 end
 end
 
+
 Game.set_tables
 
 player_array = Gather.players(4)
 team_array = Gather.teams(player_array)
 Team.declare
+
 
 while Game.keep_going?
 player_array = Dealing.rotate(player_array)
@@ -37,9 +38,9 @@ Player.declare_tricks() #this should probably be from Team, not Player
 Team.set_tricks
 Team.set_bid
 
-#Team.update_score
 team_array.each do |team|
 	team.update_score
 end
+
 Team.list_score
 end
