@@ -64,8 +64,7 @@ class Gather
 			end
 		end
 		if total_tricks > 13
-			puts
-			puts "Someone messed up here. Please try again."
+			puts "\nSomeone messed up here. Please try again."
 			sleep(1)
 			puts
 			self.tricks
@@ -73,4 +72,3 @@ class Gather
 		puts #newline
 	end
 end
-
