@@ -50,7 +50,7 @@ class Gather
 			bid = gets.chomp
 			player.set_bid = (bid)
 
-			if bid = 0 && Game.allow_blind?(player.team)
+			if bid = 0 && Game.allow_blind?(player)
 				print "Is ", + player.name, + " blind?"
 				answer = gets.chomp.to_s
 				case answer
@@ -64,7 +64,6 @@ class Gather
 			end
 		end
 		puts #newline
-		
 	end
 
 	def self.tricks()

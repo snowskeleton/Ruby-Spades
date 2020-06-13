@@ -29,8 +29,9 @@ class Game
 		#if not, then retry. somehow.
 	end
 
-	def self.allow_blind?(team)
-		Team.allow_blind? == team ? true : false
+	def self.allow_blind?(player)
+		team = Team.which_team_player(player)
+		Team.allow_blind?(team) ? true : false
 	end
 
 	def self.keep_going?()

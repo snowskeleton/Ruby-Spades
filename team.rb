@@ -26,6 +26,15 @@ class Team
 		puts #newline
 	end
 
+	def self.which_team_player(player)
+		if @@list.first == player
+			return @@list.first
+		end
+		if @@list.last  == player
+			return @@list.last
+		end
+	end
+
 	def self.set_tricks
 		@@list.each do |team|
 			team.set_tricks
@@ -50,14 +59,15 @@ class Team
 		end
 	end
 
-	def self.allow_blind?()
-		if self.list.first.score >= 100 + self.list.last.score
-			return self.list.first.name
-		elsif self.list.last.score >= 100 + self.list.first.score
-			return self.list.last.name
-		else
-			return nil
+	def self.allow_blind?(team)
+		random_array = []
+		if self.list.first.score <= 100 - self.list.last.score
+			random_array.push(self.list.first)
 		end
+		if self.list.last.score >= 100 - self.list.first.score
+			random_array.push(self.list.last)
+		end
+		random_array.include?(team) ? true : false
 	end
 
 	def players()
