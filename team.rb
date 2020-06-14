@@ -25,8 +25,37 @@ class Team
 		sleep(1)
 		puts #newline
 	end
+	
+	def self.declare_bid()
+		Player.list.each do |player|
+			print player.name, + " bid ", + player.bid, + "."
+		puts #newline
+		end
+		puts #newline
 
-	def self.which_team_player(player)
+		answer = Game.entry_validation()
+		case answer
+		when "no", "n", "on", "ono"
+			Gather.bids()
+		else
+			puts #newline
+		end
+	end
+
+	def self.declare_tricks()
+		Player.list.each do |player|
+			print player.name, + " won ", + player.tricks, + " tricks."
+			puts #newline
+		end
+		puts #newline
+
+		Team.list.each do |team|
+			print team.name, + " won ", + team.tricks, + " tricks."
+			puts #newline
+		end
+	end
+
+	def self.which_team(player)
 		@@list.each do |team|
 			if team.players.include?(player)
 				return team
@@ -58,7 +87,9 @@ class Team
 		end
 	end
 
-	def self.allow_blind?(team)
+	def self.allow_blind?(player)
+		team = Team.which_team(player)
+
 		random_array = []
 		if @@list.first.score <= @@list.last.score - 100
 			random_array.push(@@list.first)
@@ -73,6 +104,9 @@ class Team
 		@players
 	end
 
+	def score()
+		@score
+	end
 
 	def set_bid()
 		@bid = 0
@@ -115,16 +149,19 @@ class Team
 
 		@players.each do |player|
 			if player.nil?
-			puts "plyayer nil"
 				if player.blind?
-					puts "player blind"
 					player.succeed? ? self.up_score(100) : self.down_score(100)
 				else
 					player.succeed? ? self.up_score(50) : self.down_score(50)
 				end
-			else
-				#puts "not nil"
 			end
 		end
+	end
+
+	def persist()
+		db = SQLite3::Database.open 'playerbase.db'
+		db.results_as_hash = true
+		db.execute('UPDATE teams SET bid = ?, tricks = ? WHERE name IS ?', @bid, @tricks, @name)
+		db.close
 	end
 end

@@ -41,7 +41,6 @@ class Player
 
 	def set_bid=(bid)
 		@bid = bid
-		print @bid.to_s, + " player class set_bid\n"
 		db = SQLite3::Database.open 'playerbase.db'
 		db.results_as_hash = true
 		db.execute('UPDATE players SET bid = ? WHERE name IS ?', @bid, @name)
@@ -71,14 +70,7 @@ class Player
 	end
 
 	def nil?()
-		if @bid.to_i == 0
-			print self.name, + " is nil"
-			return true
-		else
-			print self.name, + " is not nil"
-			return false
-		end
-		#@bid == 0 ? true : false
+		@bid == 0 ? true : false
 	end
 
 	def blind?()

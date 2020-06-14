@@ -13,32 +13,27 @@ class Game
 		db.close
 	end
 
-	def self.persist(player_array)
-		player_array.each do |player|
+	def self.input_digit()
+		input = ""
+		while input.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil 
+			input = gets.chomp
+	end
+
+	def self.entry_validation()
+		answer = ""
+		while answer == ""
+			print "Is this correct? "
+			answer = gets.chomp.to_s
+		end
+		return answer
+	end
+	def self.persist()
+		Player.list.each do |player|
 			player.persist
 		end
-	end
-	
-	def self.declare_bid(player_array)
-		player_array.each do |player|
-			print player.name, + " bid ", + player.bid, + "."
-		puts #newline
+		Team.list.each do |team|
+			team.persist
 		end
-		puts #newline
-
-		print "Is this correct? "
-		answer = gets.chomp
-		case answer
-		when "no", "n", "on", "ono"
-			self.declare_bid(player_array)
-		else
-			next
-		end
-	end
-
-	def self.allow_blind?(player)
-		team = Team.which_team_player(player)
-		Team.allow_blind?(team) ? true : false
 	end
 
 	def self.keep_going?()
