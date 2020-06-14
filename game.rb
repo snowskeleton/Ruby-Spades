@@ -25,8 +25,15 @@ class Game
 		puts #newline
 		end
 		puts #newline
-		#print "Is this correct? "
-		#if not, then retry. somehow.
+
+		print "Is this correct? "
+		answer = gets.chomp
+		case answer
+		when "no", "n", "on", "ono"
+			self.declare_bid(player_array)
+		else
+			next
+		end
 	end
 
 	def self.allow_blind?(player)

@@ -47,11 +47,11 @@ class Gather
 	def self.bids(player_array)
 		player_array.each do |player|
 			print "What does " + player.name + " bid? "
-			bid = gets.chomp
+			bid = gets.to_i
 			player.set_bid = (bid)
-			print player.name + " bid ", + player.bid, + "\n\n"
+			#print player.name + " bid ", + player.bid, + "\n\n"
 
-			if bid = 0 && Game.allow_blind?(player)
+			if bid == 0 && Game.allow_blind?(player)
 				print "Is ", + player.name, + " blind?"
 				answer = gets.chomp.to_s
 				case answer
@@ -72,17 +72,18 @@ class Gather
 		Team.list.each do |team|
 			team.players.each do |player|
 				print "How many tricks did " + player.name + " take? "
-				tricks = gets.chomp.to_i
+				tricks = gets.to_i
 				player.set_tricks = (tricks)
 				total_tricks += tricks
 			end
 		end
-		if total_tricks > 13
-			puts "\nSomeone messed up here. Please try again."
-			sleep(1)
-			puts
-			self.tricks
-		end
+		#uncomment once you don't want to test
+		#if total_tricks != 13
+			#puts "\nSomeone messed up here. Please try again."
+			#sleep(1)
+			#puts
+			#self.tricks
+		#end
 		puts #newline
 	end
 end

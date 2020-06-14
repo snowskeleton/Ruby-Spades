@@ -13,7 +13,7 @@ class Team
 		@score = 0
 	end
 
-	def self.list
+	def self.list()
 		@@list
 	end
 
@@ -27,33 +27,32 @@ class Team
 	end
 
 	def self.which_team_player(player)
-		if @@list.first == player
-			return @@list.first
-		end
-		if @@list.last  == player
-			return @@list.last
+		@@list.each do |team|
+			if team.players.include?(player)
+				return team
+			end
 		end
 	end
 
-	def self.set_tricks
+	def self.set_tricks()
 		@@list.each do |team|
 			team.set_tricks
 		end
 	end
 
-	def self.set_bid
+	def self.set_bid()
 		@@list.each do |team|
 			team.set_bid
 		end
 	end
 
-	def self.update_score
+	def self.update_score()
 		@@list.each do |team|
 			team.update_score
 		end
 	end
 
-	def self.list_score
+	def self.list_score()
 		@@list.each do |team|
 			print team.name, + " is at ", + team.score, + ".\n"
 		end
@@ -61,11 +60,11 @@ class Team
 
 	def self.allow_blind?(team)
 		random_array = []
-		if self.list.first.score <= 100 - self.list.last.score
-			random_array.push(self.list.first)
+		if @@list.first.score <= @@list.last.score - 100
+			random_array.push(@@list.first)
 		end
-		if self.list.last.score >= 100 - self.list.first.score
-			random_array.push(self.list.last)
+		if @@list.last.score <= @@list.first.score - 100
+			random_array.push(@@list.last)
 		end
 		random_array.include?(team) ? true : false
 	end
@@ -107,7 +106,7 @@ class Team
 			@score = @score.to_i + ((@bid.to_i * 10) + (@tricks.to_i - @bid.to_i))
 			@bags = @bags.to_i + (@tricks.to_i - @bid.to_i)
 			if @bags.to_i >= 10
-				@score = @score.to_i - 100
+				#@score = @score.to_i - 100
 				@bags = 0
 			end
 		else
@@ -124,7 +123,7 @@ class Team
 					player.succeed? ? self.up_score(50) : self.down_score(50)
 				end
 			else
-				puts "not nil"
+				#puts "not nil"
 			end
 		end
 	end

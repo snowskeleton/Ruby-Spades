@@ -25,24 +25,24 @@ Team.declare
 
 
 while Game.keep_going?
-player_array = Dealing.rotate(player_array)
+	player_array = Dealing.rotate(player_array)
 
-Gather.bids(player_array)
-Game.declare_bid(player_array)
-Team.set_bid
+	Gather.bids(player_array)
+	Game.declare_bid(player_array)
+	Team.set_bid
 
-Game.persist(player_array)
+	Game.persist(player_array)
+		
+	Gather.tricks
+	Team.set_tricks
+	Game.persist(player_array)
 
-Gather.tricks
-Team.set_tricks
-Game.persist(player_array)
-
-Player.declare_tricks() #this should probably be from Team, not Player
+	Player.declare_tricks() #this should probably be from Team, not Player
 
 
-team_array.each do |team|
-	team.update_score
-end
+	team_array.each do |team|
+		team.update_score
+	end
 
-Team.list_score
+	Team.list_score
 end
