@@ -55,7 +55,7 @@ class Team
 
 	def self.list_score
 		@@list.each do |team|
-			puts team.score
+			print team.name, + " is at ", + team.score, + ".\n"
 		end
 	end
 
@@ -78,6 +78,7 @@ class Team
 	def set_bid()
 		@bid = 0
 		@players.each do |player|
+			#puts player.name, + player.bid
 			@bid = @bid + player.bid.to_i
 		end
 	end
@@ -115,11 +116,15 @@ class Team
 
 		@players.each do |player|
 			if player.nil?
+			puts "plyayer nil"
 				if player.blind?
+					puts "player blind"
 					player.succeed? ? self.up_score(100) : self.down_score(100)
 				else
 					player.succeed? ? self.up_score(50) : self.down_score(50)
 				end
+			else
+				puts "not nil"
 			end
 		end
 	end

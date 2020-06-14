@@ -49,6 +49,7 @@ class Gather
 			print "What does " + player.name + " bid? "
 			bid = gets.chomp
 			player.set_bid = (bid)
+			print player.name + " bid ", + player.bid, + "\n\n"
 
 			if bid = 0 && Game.allow_blind?(player)
 				print "Is ", + player.name, + " blind?"

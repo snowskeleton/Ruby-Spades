@@ -29,14 +29,16 @@ player_array = Dealing.rotate(player_array)
 
 Gather.bids(player_array)
 Game.declare_bid(player_array)
+Team.set_bid
 
 Game.persist(player_array)
 
 Gather.tricks
+Team.set_tricks
+Game.persist(player_array)
+
 Player.declare_tricks() #this should probably be from Team, not Player
 
-Team.set_tricks
-Team.set_bid
 
 team_array.each do |team|
 	team.update_score
