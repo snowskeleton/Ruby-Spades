@@ -88,6 +88,9 @@ class Team
 	end
 
 	def self.allow_blind?(player)
+		#this is messy. This method compares the first team to see if they're 100 points lower than the second team, if yes add to array.
+		##Then it compares the second team to the first with the same rule, if yes add to array.
+		##Finally, it checks if the given argument is in that array, if yes true, else false.
 		team = Team.which_team(player)
 
 		random_array = []
