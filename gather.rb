@@ -41,6 +41,7 @@ class Gather
 		Player.list.each do |player|
 			print "What does " + player.name + " bid? "
 			bid = Game.input_digit()
+
 			player.set_bid = (bid)
 
 			if bid == 0 && Team.allow_blind?(player)

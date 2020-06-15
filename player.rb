@@ -20,6 +20,10 @@ class Player
 		@@list
 	end
 
+	def bid()
+		@bid
+	end
+
 	def persist()
 		db = SQLite3::Database.open 'playerbase.db'
 		db.results_as_hash = true

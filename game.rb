@@ -14,9 +14,8 @@ class Game
 	end
 
 	def self.input_digit()
-		input = ""
-		while input.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil 
-			input = gets.chomp
+		input = gets.to_i
+		return input
 	end
 
 	def self.entry_validation()
