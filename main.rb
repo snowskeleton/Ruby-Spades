@@ -7,13 +7,13 @@ require_relative 'gather'
 require_relative 'game'
 
 def calculate_score
-team_array.each do |team|
-	team.set_tricks
-end
+    team_array.each do |team|
+	    team.set_tricks
+    end
 
-team_array.each do |team|
-	team.set_bid
-end
+    team_array.each do |team|
+	    team.set_bid
+    end
 end
 
 

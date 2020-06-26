@@ -33,6 +33,16 @@ class Team
 		end
 		puts #newline
 
+		total_bid = 0
+		Team.list.each do |team|
+			print team.name, + " bid ", + team.bid, + "."
+			total_bid += team.bid
+		puts #newline
+		end
+		print "The total bid is ", + total_bid.to_s, + ".\n"
+		
+		puts #newline
+
 		answer = Game.entry_validation()
 		case answer
 		when "no", "n", "on", "ono"
